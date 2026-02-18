@@ -14,6 +14,7 @@ function init(existingCbl) {
 
   life.seed(width, height);
   cbl.setData(life.state);
+  cbl.onClick(({ x, y }) => cbl.setCheckboxValue(x, y, cbl.getCheckboxValue(x, y) ? 0 : 1));
   loop();
 
   return cbl;
@@ -21,12 +22,14 @@ function init(existingCbl) {
 
 function cleanUp() {
   clearTimeout(timeoutId);
+  cbl.onClick.cleanUp();
 }
 
 function loop() {
   timeoutId = setTimeout(function timeoutFunc() {
     if (!playEl || (playEl && playEl.checked)) {
       // Repopulate the board.
+      life.state = cbl.getData();
       life.generate();
       cbl.setData(life.state);
     }
